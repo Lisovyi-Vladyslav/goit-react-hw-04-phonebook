@@ -1,4 +1,4 @@
-import { useState  } from 'react';
+import { useEffect, useState  } from 'react';
 import { nanoid } from 'nanoid'
 
 import { ContactForm } from "components/ContactForm/ContactForm";
@@ -9,7 +9,9 @@ import  defaultContact  from "defaultContact.json";
 
  
 export  function App() {
-  const [contacts, setContacts] = useState(defaultContact);
+  const [contacts, setContacts] = useState(() => {
+    return JSON.parse(localStorage.getItem('contacts')) || defaultContact;
+  });
   const [filter, setFilter] = useState('');
 
 const handleAddContact = ({ name, number }) => {
@@ -43,6 +45,9 @@ const handleContacts = () => {
      );
 	};
 
+  useEffect(() => {
+localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts])
   return (
    <>
          <div>
